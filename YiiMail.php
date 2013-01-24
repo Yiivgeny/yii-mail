@@ -104,6 +104,13 @@ class YiiMail extends CApplicationComponent
 	*/
 	public function init() {
 		$this->registerScripts();
+
+        // Configuring
+        Swift_Preferences::getInstance()
+            ->setCharset('utf-8')
+            ->setTempDir(Yii::getPathOfAlias('application.runtime'))
+            ->setCacheType('disk');
+        
 		parent::init();	
 	}
 	
@@ -239,6 +246,9 @@ class YiiMail extends CApplicationComponent
     	self::$registeredScripts = true;
 		require dirname(__FILE__).'/vendors/swiftMailer/classes/Swift.php';
 		Yii::registerAutoloader(array('Swift','autoload'));
-		require dirname(__FILE__).'/vendors/swiftMailer/swift_init.php';
+
+		require dirname(__FILE__).'/vendors/swiftMailer/dependency_maps/cache_deps.php';
+		require dirname(__FILE__).'/vendors/swiftMailer/dependency_maps/mime_deps.php';
+		require dirname(__FILE__).'/vendors/swiftMailer/dependency_maps/transport_deps.php';
 	}
 }
