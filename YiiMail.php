@@ -57,7 +57,7 @@ class YiiMail extends CApplicationComponent
 	public $dryRun = false;
 	
 	/**
-	* @var string the delivery type.  Can be either 'php' or 'smtp'.  When 
+	* @var string the delivery type.  Can be either 'php' or 'smtp' or 'sendmail'.  When
 	* using 'php', PHP's {@link mail()} function will be used.
 	* Defaults to 'php'.
 	*/
@@ -204,13 +204,18 @@ class YiiMail extends CApplicationComponent
 	/**
 	* Gets the SwiftMailer transport class instance, initializing it if it has 
 	* not been created yet
-	* @return mixed {@link Swift_MailTransport} or {@link Swift_SmtpTransport}
+	* @return mixed {@link Swift_MailTransport} or {@link Swift_SmtpTransport} or {@link Swift_SendmailTransport}
 	*/
 	public function getTransport() {
 		if ($this->transport===null) {
 			switch ($this->transportType) {
 				case 'php':
 					$this->transport = Swift_MailTransport::newInstance();
+					if ($this->transportOptions !== null)
+						$this->transport->setExtraParams($this->transportOptions);
+					break;
+				case 'sendmail':
+					$this->transport = Swift_SendmailTransport::newInstance();
 					if ($this->transportOptions !== null)
 						$this->transport->setExtraParams($this->transportOptions);
 					break;
