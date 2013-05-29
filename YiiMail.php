@@ -107,7 +107,7 @@ class YiiMail extends CApplicationComponent
 
         // Configuring
         Swift_Preferences::getInstance()
-            ->setCharset('utf-8')
+            ->setCharset(Yii::app()->charset)
             ->setTempDir(Yii::getPathOfAlias('application.runtime'))
             ->setCacheType('disk');
         
